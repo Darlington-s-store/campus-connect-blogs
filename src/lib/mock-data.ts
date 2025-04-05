@@ -153,3 +153,4 @@ posts.forEach(post => {
   // Attach author to post
   post.author = users.find(user => user.id === post.authorId);
 });
+export default mock-data;
