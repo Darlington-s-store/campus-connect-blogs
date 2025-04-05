@@ -30,6 +30,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from "@/components/ui/tooltip";
 
 const BlogDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -125,20 +130,34 @@ const BlogDetailPage = () => {
           <div className="flex items-center space-x-2">
             {canEditPost && (
               <>
-                <Button variant="outline" size="sm" asChild>
-                  <Link to={`/edit-post/${post.id}`}>
-                    <Edit className="h-4 w-4 mr-1" />
-                    Edit
-                  </Link>
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline" size="sm" asChild>
+                      <Link to={`/edit-post/${post.id}`}>
+                        <Edit className="h-4 w-4 mr-1" />
+                        Edit
+                      </Link>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Edit this post</p>
+                  </TooltipContent>
+                </Tooltip>
                 
                 <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="destructive" size="sm">
-                      <Trash2 className="h-4 w-4 mr-1" />
-                      Delete
-                    </Button>
-                  </AlertDialogTrigger>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="destructive" size="sm">
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          Delete
+                        </Button>
+                      </AlertDialogTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Delete this post</p>
+                    </TooltipContent>
+                  </Tooltip>
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>Are you sure?</AlertDialogTitle>
@@ -186,37 +205,58 @@ const BlogDetailPage = () => {
       <Card className="mb-8">
         <CardContent className="p-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={handleLike} 
-              disabled={!user || isLiking}
-              className="flex items-center"
-            >
-              <Heart className={`h-4 w-4 mr-1 ${user ? 'text-destructive' : ''}`} />
-              <span>{post.likes} Likes</span>
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleLike} 
+                  disabled={!user || isLiking}
+                  className="flex items-center"
+                >
+                  <Heart className={`h-4 w-4 mr-1 ${user && post.likes > 0 ? 'text-destructive fill-destructive' : ''}`} />
+                  <span>{post.likes} Likes</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{user ? 'Like this post' : 'Sign in to like'}</p>
+              </TooltipContent>
+            </Tooltip>
             
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => document.getElementById('comments')?.scrollIntoView({ behavior: 'smooth' })}
-              className="flex items-center"
-            >
-              <MessageSquare className="h-4 w-4 mr-1" />
-              <span>{post.comments.length} Comments</span>
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => document.getElementById('comments')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="flex items-center"
+                >
+                  <MessageSquare className="h-4 w-4 mr-1" />
+                  <span>{post.comments.length} Comments</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>View comments</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
           
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={handleShare}
-            className="flex items-center"
-          >
-            <Share className="h-4 w-4 mr-1" />
-            <span>Share</span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleShare}
+                className="flex items-center"
+              >
+                <Share className="h-4 w-4 mr-1" />
+                <span>Share</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Copy link to clipboard</p>
+            </TooltipContent>
+          </Tooltip>
         </CardContent>
       </Card>
       

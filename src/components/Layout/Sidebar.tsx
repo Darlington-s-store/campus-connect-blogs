@@ -2,6 +2,16 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
+import { 
+  Home,
+  FileText,
+  PenSquare,
+  User,
+  LayoutDashboard,
+  Users,
+  BarChart3
+} from "lucide-react";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -12,17 +22,17 @@ const Sidebar = () => {
   };
 
   const navItems = [
-    { name: "Home", path: "/" },
-    { name: "My Posts", path: "/my-posts" },
-    { name: "Create Post", path: "/create-post" },
-    { name: "Profile", path: "/profile" },
+    { name: "Home", path: "/", icon: <Home className="h-4 w-4 mr-2" /> },
+    { name: "My Posts", path: "/my-posts", icon: <FileText className="h-4 w-4 mr-2" /> },
+    { name: "Create Post", path: "/create-post", icon: <PenSquare className="h-4 w-4 mr-2" /> },
+    { name: "Profile", path: "/profile", icon: <User className="h-4 w-4 mr-2" /> },
   ];
 
   // Admin and educator specific items
   const adminItems = [
-    { name: "Dashboard", path: "/dashboard" },
-    { name: "Manage Users", path: "/manage-users" },
-    { name: "Reports", path: "/reports" },
+    { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard className="h-4 w-4 mr-2" /> },
+    { name: "Manage Users", path: "/manage-users", icon: <Users className="h-4 w-4 mr-2" /> },
+    { name: "Reports", path: "/reports", icon: <BarChart3 className="h-4 w-4 mr-2" /> },
   ];
 
   return (
@@ -42,15 +52,23 @@ const Sidebar = () => {
         <ul className="space-y-2">
           {navItems.map((item) => (
             <li key={item.path}>
-              <Link
-                to={item.path}
-                className={cn(
-                  "flex items-center px-4 py-3 rounded-lg hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors",
-                  isActive(item.path) && "bg-sidebar-accent text-sidebar-accent-foreground"
-                )}
-              >
-                {item.name}
-              </Link>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    to={item.path}
+                    className={cn(
+                      "flex items-center px-4 py-3 rounded-lg hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors",
+                      isActive(item.path) && "bg-sidebar-accent text-sidebar-accent-foreground"
+                    )}
+                  >
+                    {item.icon}
+                    {item.name}
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>{item.name}</p>
+                </TooltipContent>
+              </Tooltip>
             </li>
           ))}
           
@@ -64,15 +82,23 @@ const Sidebar = () => {
               </li>
               {adminItems.map((item) => (
                 <li key={item.path}>
-                  <Link
-                    to={item.path}
-                    className={cn(
-                      "flex items-center px-4 py-3 rounded-lg hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors",
-                      isActive(item.path) && "bg-sidebar-accent text-sidebar-accent-foreground"
-                    )}
-                  >
-                    {item.name}
-                  </Link>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link
+                        to={item.path}
+                        className={cn(
+                          "flex items-center px-4 py-3 rounded-lg hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors",
+                          isActive(item.path) && "bg-sidebar-accent text-sidebar-accent-foreground"
+                        )}
+                      >
+                        {item.icon}
+                        {item.name}
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      <p>{item.name}</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </li>
               ))}
             </>
