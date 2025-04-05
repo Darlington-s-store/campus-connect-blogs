@@ -8,9 +8,10 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (emailOrIndex: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string, role: UserRole) => Promise<boolean>;
   logout: () => void;
+  setNewPassword: (indexNumber: string, newPassword: string) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,24 +34,57 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     loadUser();
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (emailOrIndex: string, password: string) => {
     try {
       setIsLoading(true);
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const loggedInUser = auth.login(email, password);
+      // Check if input is an index number (for students)
+      const isIndexNumber = /^\d+$/.test(emailOrIndex);
+      
+      let loggedInUser;
+      if (isIndexNumber) {
+        // Login with index number (for students)
+        loggedInUser = auth.loginWithIndexNumber(emailOrIndex, password);
+      } else {
+        // Regular login with email
+        loggedInUser = auth.login(emailOrIndex, password);
+      }
       
       if (loggedInUser) {
         setUser(loggedInUser);
         toast.success(`Welcome back, ${loggedInUser.name}!`);
         return true;
       } else {
-        toast.error('Invalid email or password');
+        toast.error('Invalid credentials');
         return false;
       }
     } catch (error) {
       toast.error('An error occurred during login');
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const setNewPassword = async (indexNumber: string, newPassword: string) => {
+    try {
+      setIsLoading(true);
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const success = auth.setNewPassword(indexNumber, newPassword);
+      
+      if (success) {
+        toast.success('Password set successfully. You can now login.');
+        return true;
+      } else {
+        toast.error('Failed to set password. Invalid index number.');
+        return false;
+      }
+    } catch (error) {
+      toast.error('An error occurred while setting new password');
       return false;
     } finally {
       setIsLoading(false);
@@ -88,7 +122,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       isLoading,
       login,
       register,
-      logout
+      logout,
+      setNewPassword
     }}>
       {children}
     </AuthContext.Provider>

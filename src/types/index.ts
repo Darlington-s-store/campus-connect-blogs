@@ -12,6 +12,7 @@ export interface User {
   interests?: string[];
   following?: string[];
   followers?: string[];
+  indexNumber?: string; // Added for student index numbers
 }
 
 export interface Post {
