@@ -153,4 +153,28 @@ posts.forEach(post => {
   // Attach author to post
   post.author = users.find(user => user.id === post.authorId);
 });
-export default mock-data;
+
+// Export the populated posts (posts already have authors and comments attached)
+export const populatedPosts = posts;
+
+export const categories = [
+  'Technology',
+  'Science',
+  'Programming',
+  'Education',
+  'Campus Life',
+  'Events'
+];
+
+export const tags = [
+  'React',
+  'JavaScript',
+  'TypeScript',
+  'Web Development',
+  'Student Life',
+  'Learning',
+  'Career',
+  'Tutorials'
+];
+
+export default auth;
